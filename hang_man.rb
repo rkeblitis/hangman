@@ -12,7 +12,7 @@ class Hangman
 
   def game_flow
     puts @randword.inspect
-    while @secret_word != @randword && @guesses_stored.length < 6
+    while @secret_word != @randword && @wrong_guesses.length < 3
       user_input
       compare
       current_user_display
@@ -58,7 +58,6 @@ class Hangman
     else
       @guesses_stored << @guess
       puts "You have guessed '#{@guesses_stored.join}' so far"
-
     end
   end
 
@@ -68,6 +67,10 @@ class Hangman
       if @guess == c
         replace(c, i)
       end
+    end
+    if !@randword.chars.include?(@guess)
+      @wrong_guesses << @guess
+      puts "#@wrong_guesses is incorrect"
     end
   puts @secret_word
 # compare the array of the secret word to the guess
@@ -82,4 +85,4 @@ class Hangman
 end
 
 
-Hangman.new.game_flow
+h = Hangman.new.game_flow
