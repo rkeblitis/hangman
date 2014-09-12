@@ -1,23 +1,23 @@
 class Hangman
-  attr_accessor :randword, :guess, :guesses_stored, :secret_word
+  attr_accessor :randword, :guess, :guesses_stored, :secret_word, :guesses_left,
+    :total_guesses
   def initialize
     @randword             = random_word #
-    #@secret_word         = @randword
-    @guesses_stored       = []
-    @wrong_guesses       = []
-    #@correct_guesses     = []
+    @correct_guesses      = []
+    @wrong_guesses        = []
+    @total_guesses        = []
     @secret_word          = convert_word_to_secret(@randword)
     @guess                = ""
+    @guesses_left         = guesses_left
   end
 
   def game_flow
     puts @randword.inspect
     while @secret_word != @randword && @wrong_guesses.length < 3
       user_input
-      compare
+
       current_user_display
 
-      #puts "End Game"
     end
   end
 
@@ -48,21 +48,26 @@ class Hangman
   def user_input
     puts "Pick a letter:"
     @guess = gets.chomp.downcase
-    duplicate_guess(@guess)
+    duplicate_guess
   end
 
-  def duplicate_guess(guess)
-    if @guesses_stored.include?(guess) == true
-        puts "You already guessed that letter silly!"
-        user_input
+  # def number_of_guesses_left(guess_number)
+  #   @guesses_left = @wrong_guesses - guess_number
+  #   puts "You have six guesses"
+  #   puts "!!!!!!! @guesses_left!!!!!!"
+  # end
+
+  def duplicate_guess
+    if @total_guesses.include? @guess
+      puts "You already guessed that letter silly!"
+      user_input
     else
-      @guesses_stored << @guess
-      puts "You have guessed '#{@guesses_stored.join}' so far"
+      @total_guesses << @guess
+        compare
     end
   end
 
   def compare
-    # dupliate_guess
     @randword.chars.each_with_index do |c, i|
       if @guess == c
         replace(c, i)
@@ -71,18 +76,21 @@ class Hangman
     if !@randword.chars.include?(@guess)
       @wrong_guesses << @guess
       puts "#@wrong_guesses is incorrect"
+    else
+      @correct_guesses << @guess
+      puts "Good Guess!"
+      puts "You've guessed #{@total_guesses} so far"
     end
   puts @secret_word
-# compare the array of the secret word to the guess
   end
 
   def replace(charcter,index)
     @secret_word[index] = charcter
     @secret_word
-    # replaces index of the secret word array with the correct guess
   end
 
 end
 
 
-h = Hangman.new.game_flow
+h = Hangman.new
+h.game_flow
