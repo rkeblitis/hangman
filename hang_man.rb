@@ -1,3 +1,8 @@
+#class Man
+  # I need an interger representing the number of wrong guesses
+  # method that reads the interger, and based on that will print the
+  # body parts. ex 0 would = nil
+
 class Hangman
   attr_accessor :randword, :guess, :guesses_stored, :secret_word, :guesses_left,
     :total_guesses
@@ -8,17 +13,19 @@ class Hangman
     @total_guesses        = []
     @secret_word          = convert_word_to_secret(@randword)
     @guess                = ""
-    @guesses_left         = guesses_left
+    @guesses_left         = 6
   end
 
-  def game_flow
-    puts @randword.inspect
-    while @secret_word != @randword && @wrong_guesses.length < 3
-      user_input
 
-      current_user_display
+  def game_flow
+    puts "You have #@guesses_left guesses. Good Luck!"
+    puts @randword.inspect
+    while @secret_word != @randword && @wrong_guesses.length < 6#make intoa global variably- or make it global to the clas
+      user_input
+      board
 
     end
+    puts "End"
   end
 
   def random_word
@@ -26,8 +33,8 @@ class Hangman
     words.sample
   end
 
-  def current_user_display
-    #def duplicate_guess
+  def board
+    puts 
 
   end
     #puts @guesses_stored.inspect
@@ -46,7 +53,8 @@ class Hangman
   end
 
   def user_input
-    puts "Pick a letter:"
+    puts "*" * 80
+    puts "Pick a letter:\n"
     @guess = gets.chomp.downcase
     duplicate_guess
   end
@@ -75,7 +83,10 @@ class Hangman
     end
     if !@randword.chars.include?(@guess)
       @wrong_guesses << @guess
+      guesses_left(1)
       puts "#@wrong_guesses is incorrect"
+      puts "You have #@guesses_left left."
+
     else
       @correct_guesses << @guess
       puts "Good Guess!"
@@ -88,6 +99,11 @@ class Hangman
     @secret_word[index] = charcter
     @secret_word
   end
+
+  def guesses_left(wrong_guess)
+    @guesses_left = @guesses_left - wrong_guess
+  end
+
 
 end
 
