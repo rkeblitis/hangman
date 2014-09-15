@@ -14,6 +14,13 @@ class Hangman
     @secret_word          = convert_word_to_secret(@randword)
     @guess                = ""
     @guesses_left         = 6
+    @left_ear             = "\\"
+    @right_ear            = "/"
+    @left_eye             = "-"
+    @right_eye            = "-"
+    @nose                 = "."
+    @left_foot            = ">"
+    @right_foot           = "<"
   end
 
 
@@ -34,9 +41,13 @@ class Hangman
   end
 
   def board
-    puts 
-
+    puts """
+          (#@left_ear   #@right_ear)
+          (#@left_eye #@nose #@right_eye)
+          (#@left_foot   #@right_foot)
+  """
   end
+
     #puts @guesses_stored.inspect
     #puts @secret_word.inspect
     # secret word spaces
