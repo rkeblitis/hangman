@@ -5,7 +5,8 @@
 
 class Hangman
   attr_accessor :randword, :guess, :guesses_stored, :secret_word, :guesses_left,
-    :total_guesses
+    :total_guesses, :left_ear, :right_ear, :left_eye, :right_eye, :nose, :left_foot,
+    :right_foot, :bunny
   def initialize
     @randword             = random_word #
     @correct_guesses      = []
@@ -13,24 +14,36 @@ class Hangman
     @total_guesses        = []
     @secret_word          = convert_word_to_secret(@randword)
     @guess                = ""
-    @guesses_left         = 6
-    @left_ear             = "\\"
-    @right_ear            = "/"
-    @left_eye             = "-"
-    @right_eye            = "-"
+    @guesses_left         = 7
+    @left_ear             = "(\\"
+    @right_ear            = "/)"
+    @left_eye             = "(x"
+    @right_eye            = "x)"
     @nose                 = "."
-    @left_foot            = ">"
-    @right_foot           = "<"
+    @left_foot            = "(>"
+    @right_foot           = "<)"
+
+    @bunny_parts          =   [
+                            @left_ear,   @right_ear,
+                            @left_eye, @nose, @right_eye,
+                            @left_foot,   @right_foot ]
+    @bunny                = """
+                            #@left_ear   #@right_ear
+                            #@left_eye #@nose #@right_eye
+                            #@left_foot   #@right_foot
+                            """
+
+
   end
 
 
   def game_flow
+    puts @bunny
+
     puts "You have #@guesses_left guesses. Good Luck!"
     puts @randword.inspect
-    while @secret_word != @randword && @wrong_guesses.length < 6#make intoa global variably- or make it global to the clas
+    while @secret_word != @randword && @wrong_guesses.length < 7#make intoa global variably- or make it global to the clas
       user_input
-      board
-
     end
     puts "End"
   end
@@ -41,19 +54,8 @@ class Hangman
   end
 
   def board
-    puts """
-          (#@left_ear   #@right_ear)
-          (#@left_eye #@nose #@right_eye)
-          (#@left_foot   #@right_foot)
-  """
+    puts @bunny_parts[1] - @bunny
   end
-
-    #puts @guesses_stored.inspect
-    #puts @secret_word.inspect
-    # secret word spaces
-    # if guess is correct and placement of guess
-    # show board
-    #word status of current game, display the incorrent guessses
 
   def convert_word_to_secret(temp_word)
     secret_word = temp_word.dup
@@ -64,17 +66,11 @@ class Hangman
   end
 
   def user_input
-    puts "*" * 80
+    puts "    *" * 60
     puts "Pick a letter:\n"
     @guess = gets.chomp.downcase
     duplicate_guess
   end
-
-  # def number_of_guesses_left(guess_number)
-  #   @guesses_left = @wrong_guesses - guess_number
-  #   puts "You have six guesses"
-  #   puts "!!!!!!! @guesses_left!!!!!!"
-  # end
 
   def duplicate_guess
     if @total_guesses.include? @guess
@@ -96,6 +92,7 @@ class Hangman
       @wrong_guesses << @guess
       guesses_left(1)
       puts "#@wrong_guesses is incorrect"
+      board
       puts "You have #@guesses_left left."
 
     else
@@ -114,7 +111,6 @@ class Hangman
   def guesses_left(wrong_guess)
     @guesses_left = @guesses_left - wrong_guess
   end
-
 
 end
 
